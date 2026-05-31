@@ -21,6 +21,7 @@
       background: #111;
       color: white;
       font-family: Arial, sans-serif;
+      max-width: 768px;
     }
 
     /* FULLSCREEN LAYOUT */
@@ -41,13 +42,30 @@
       font-size: 2rem;
     }
 
-    /* MODEL VIEWER TAKES REMAINING SPACE */
-    model-viewer {
+    .model-container {
+      position: relative;
       flex: 1 1 auto;
-      width: 100%;
-      background: #222;
-      display: block;
       min-height: 0;
+    }
+
+    .model-container model-viewer {
+      width: 100%;
+      height: 100%;
+      background: #222;
+    }
+
+    #art-caption {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+
+      text-align: right;
+      line-height: 1.4;
+
+      color: white;
+      text-shadow: 0 0 8px rgba(0,0,0,0.8);
+
+      pointer-events: none;
     }
 
     /* FIXED CONTROLS HEIGHT */
@@ -81,42 +99,58 @@
 
   <div class="art-viewer">
 
-    <h1>meinland</h1>
+  <img src="{{ '/assets/img/header-meinland.png' | relative_url }}" />
 
+  <div class="model-container">
     <model-viewer
       id="viewer"
-      src="{{ '/assets/models/test-ar.glb' | relative_url }}"
+      src="{{ '/assets/models/canvas-lasania.glb' | relative_url }}"
       camera-controls
       auto-rotate
       shadow-intensity="1"
       ar
+      ar-placement="wall"
     >
+    <button slot="ar-button">
+    </button>
     </model-viewer>
 
-    <div class="controls">
-      <button id="prevBtn">←</button>
-      <button id="nextBtn">→</button>
-    </div>
+    <p id="art-caption">
+      Lasania<br>
+      18x13cm<br>
+      oleo sobre lienzo
+    </p>
+  </div>
+
+  <div class="controls">
+    <button id="prevBtn">←</button>
+    <button id="nextBtn">→</button>
+  </div>
 
   </div>
 
   <script>
     const viewer = document.getElementById("viewer");
+    const artCaption = document.getElementById("art-caption");
 
-    const models = [
-      "{{ '/assets/models/test-ar.glb' | relative_url }}",
-    ];
+    const art = {{site.data.art | jsonify}}
 
     let currentIndex = 0;
 
     function updateModel() {
-      viewer.src = models[currentIndex];
+      var artwork = art[currentIndex];
+      viewer.src = artwork.src;
+      artCaption.innerHTML = [
+        artwork.name,
+        artwork.technique,
+        artwork.size
+      ].join("<br>");
     }
 
     document.getElementById("nextBtn").addEventListener("click", () => {
       currentIndex++;
 
-      if (currentIndex >= models.length) {
+      if (currentIndex >= art.length) {
         currentIndex = 0;
       }
 
@@ -127,11 +161,13 @@
       currentIndex--;
 
       if (currentIndex < 0) {
-        currentIndex = models.length - 1;
+        currentIndex = art.length - 1;
       }
 
       updateModel();
     });
+
+    updateModel();
   </script>
 
 </body>
