@@ -11,6 +11,10 @@
   </script>
 
   <style>
+    :root {
+      --frame-size: 64px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -42,6 +46,10 @@
       font-size: 2rem;
     }
 
+    #header{
+      padding-bottom: 8px;
+    }
+
     .model-container {
       position: relative;
       flex: 1 1 auto;
@@ -52,12 +60,53 @@
       width: 100%;
       height: 100%;
       background: #222;
+      position: relative;
+    }
+
+    /* top + bottom */
+    .model-container::before {
+        content: "";
+        position: absolute;
+        inset: calc(var(--frame-size) / -2) 0;
+        pointer-events: none;
+        z-index: 1;
+
+        background:
+            url("{{ '/assets/img/frame-outline-x.png' | relative_url }}") top repeat-x,
+            url("{{ '/assets/img/frame-outline-x.png' | relative_url }}") bottom repeat-x;
+
+        background-size:
+            auto var(--frame-size),
+            auto var(--frame-size);
+    }
+
+    .model-container::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        background:
+            url("{{ '/assets/img/frame-outline-y.png' | relative_url }}")
+            left calc(var(--frame-size) / -2) top 0 repeat-y,
+
+            url("{{ '/assets/img/frame-outline-y.png' | relative_url }}")
+            right calc(var(--frame-size) / -2) top 0 repeat-y;
+
+        background-size:
+            var(--frame-size) auto,
+            var(--frame-size) auto;
+
+        pointer-events: none;
+    }
+
+    #art-caption {
+        z-index: 2;
     }
 
     #art-caption {
       position: absolute;
-      right: 20px;
-      bottom: 20px;
+      right: 32px;
+      bottom: 32px;
 
       text-align: right;
       line-height: 1.4;
@@ -70,7 +119,7 @@
 
     /* FIXED CONTROLS HEIGHT */
     .controls {
-      flex: 0 0 100px;
+      flex: 0 0 128px;
 
       display: flex;
       justify-content: center;
@@ -113,7 +162,7 @@
 
   <div class="art-viewer">
 
-  <img src="{{ '/assets/img/header-meinland.png' | relative_url }}" />
+  <img id="header" src="{{ '/assets/img/header-meinland.png' | relative_url }}" />
 
   <div class="model-container">
     <model-viewer
