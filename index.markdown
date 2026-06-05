@@ -75,7 +75,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 40px;
+      gap: 64px;
     }
 
     .controls button {
@@ -91,6 +91,20 @@
 
     .controls button:hover {
       background: #555;
+    }
+    
+    #prevBtn,
+    #nextBtn {
+        width: 92px;
+        height: 100%;
+        background: url("{{ '/assets/img/button-right.png' | relative_url }}") center/contain no-repeat;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Flip horizontally */
+    #prevBtn {
+        transform: scaleX(-1);
     }
   </style>
 </head>
@@ -123,8 +137,8 @@
   </div>
 
   <div class="controls">
-    <button id="prevBtn">←</button>
-    <button id="nextBtn">→</button>
+    <button id="prevBtn"></button>
+    <button id="nextBtn"></button>
   </div>
 
   </div>
