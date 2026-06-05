@@ -202,7 +202,7 @@
 
     function updateModel() {
       var artwork = art[currentIndex];
-      viewer.src = artwork.src;
+      viewer.src = "{{ '' | relative_url }}" + artwork.src;
       artCaption.innerHTML = [
         artwork.name,
         artwork.technique,
